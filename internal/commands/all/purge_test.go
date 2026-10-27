@@ -60,3 +60,14 @@ func TestPurgeCommand(t *testing.T) {
 		})
 	}
 }
+
+func TestPurgeCommandHelpExplainsSafety(t *testing.T) {
+	command := commands.BuildCommand(PurgeCommand(), nil, config.New())
+	help := command.Cobra().Long
+
+	assert.Contains(t, help, "CI cleanup")
+	assert.Contains(t, help, "termination protection")
+	assert.Contains(t, help, "external timeout")
+	assert.Contains(t, help, "upctl all list")
+	assert.Contains(t, help, "--include and --exclude")
+}
