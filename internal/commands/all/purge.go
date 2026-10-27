@@ -26,7 +26,16 @@ type purgeCommand struct {
 }
 
 func (c *purgeCommand) InitCommand() {
-	c.Cobra().Long = `Delete all resources from the current account. Use ` + "`" + `upctl all list` + "`" + ` command to preview targeted resources before purging.`
+	c.Cobra().Long = `Delete all resources from the current account.
+
+WARNING: This command is intended for CI cleanup, not routine interactive deletion.
+It force-deletes supported resources, disables termination protection when needed,
+and retries failed resource deletions until an external timeout or cancellation.
+Use an explicit timeout when running purge in automation.
+
+Preview the exact target set with ` + "`" + `upctl all list` + "`" + ` using the same
+--include and --exclude filters before purging. By default, --include matches
+all resources in the account.`
 
 	flags := &pflag.FlagSet{}
 	flags.StringArrayVarP(&c.include, "include", "i", []string{"*"}, includeHelp)
